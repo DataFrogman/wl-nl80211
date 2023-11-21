@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 
+use core::fmt;
+
 const NL80211_IFTYPE_ADHOC: u32 = 1;
 const NL80211_IFTYPE_STATION: u32 = 2;
 const NL80211_IFTYPE_AP: u32 = 3;
@@ -80,6 +82,26 @@ impl From<Nl80211InterfaceType> for u32 {
             Nl80211InterfaceType::Ocb => NL80211_IFTYPE_OCB,
             Nl80211InterfaceType::Nan => NL80211_IFTYPE_NAN,
             Nl80211InterfaceType::Other(d) => d,
+        }
+    }
+}
+
+impl fmt::Display for Nl80211InterfaceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Nl80211InterfaceType::Adhoc => write!(f, "Ad-Hoc"),
+            Nl80211InterfaceType::Station => write!(f, "Station"),
+            Nl80211InterfaceType::Ap => write!(f, "AP"),
+            Nl80211InterfaceType::ApVlan => write!(f, "AP VLAN"),
+            Nl80211InterfaceType::Wds => write!(f, "WDS"),
+            Nl80211InterfaceType::Monitor => write!(f, "Monitor"),
+            Nl80211InterfaceType::MeshPoint => write!(f, "Mesh Point"),
+            Nl80211InterfaceType::P2pClient => write!(f, "P2P Client"),
+            Nl80211InterfaceType::P2pGo => write!(f, "P2P Group Owner"),
+            Nl80211InterfaceType::P2pDevice => write!(f, "P2P Device"),
+            Nl80211InterfaceType::Ocb => write!(f, "OCB"),
+            Nl80211InterfaceType::Nan => write!(f, "NAN"),
+            Nl80211InterfaceType::Other(_) => write!(f, "Unspecified"),
         }
     }
 }
