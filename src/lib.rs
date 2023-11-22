@@ -3,11 +3,13 @@
 mod attr;
 mod channel;
 mod connection;
+pub mod constants;
 mod error;
 mod handle;
 mod iface;
 mod macros;
 mod message;
+mod mntr_flags;
 mod stats;
 
 pub use attr::Nl80211Attr;
@@ -21,6 +23,7 @@ pub use iface::{
     Nl80211InterfaceGetRequest, Nl80211InterfaceHandle, Nl80211InterfaceType,
 };
 pub use message::{Nl80211Cmd, Nl80211Message};
+pub use mntr_flags::Nl80211MonitorModeFlags;
 pub use stats::Nl80211TransmitQueueStat;
 
 pub(crate) use handle::nl80211_execute;

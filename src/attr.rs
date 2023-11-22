@@ -11,6 +11,7 @@ use netlink_packet_utils::{
 use crate::{
     channel::{Nl80211ChannelWidth, Nl80211WiPhyChannelType},
     iface::Nl80211InterfaceType,
+    mntr_flags::Nl80211MonitorModeFlags,
     stats::Nl80211TransmitQueueStat,
 };
 
@@ -19,6 +20,7 @@ const NL80211_ATTR_IFINDEX: u16 = 3;
 const NL80211_ATTR_IFNAME: u16 = 4;
 const NL80211_ATTR_IFTYPE: u16 = 5;
 const NL80211_ATTR_MAC: u16 = 6;
+const NL80211_ATTR_MNTR_FLGS: u16 = 23;
 const NL80211_ATTR_WIPHY_FREQ: u16 = 38;
 const NL80211_ATTR_WIPHY_CHANNEL_TYPE: u16 = 39;
 const NL80211_ATTR_GENERATION: u16 = 46;
@@ -46,6 +48,7 @@ pub enum Nl80211Attr {
     Wdev(u64),
     Generation(u32),
     Use4Addr(bool),
+    MntrFlags(Vec<Nl80211MonitorModeFlags>),
     WiPhyFreq(u32),
     WiPhyFreqOffset(u32),
     WiPhyChannelType(Nl80211WiPhyChannelType),
@@ -78,6 +81,7 @@ impl Nla for Nl80211Attr {
             Self::Mac(_) => ETH_ALEN,
             Self::Use4Addr(_) => 1,
             Self::TransmitQueueStats(ref nlas) => nlas.as_slice().buffer_len(),
+            Self::MntrFlags(ref flags) => flags.as_slice().buffer_len(),
             Self::MloLinks(ref links) => links.as_slice().buffer_len(),
             Self::Other(attr) => attr.value_len(),
         }
@@ -90,6 +94,7 @@ impl Nla for Nl80211Attr {
             Self::IfName(_) => NL80211_ATTR_IFNAME,
             Self::IfType(_) => NL80211_ATTR_IFTYPE,
             Self::Mac(_) => NL80211_ATTR_MAC,
+            Self::MntrFlags(_) => NL80211_ATTR_MNTR_FLGS,
             Self::Wdev(_) => NL80211_ATTR_WDEV,
             Self::Generation(_) => NL80211_ATTR_GENERATION,
             Self::Use4Addr(_) => NL80211_ATTR_4ADDR,
@@ -120,6 +125,7 @@ impl Nla for Nl80211Attr {
             Self::Wdev(d) => NativeEndian::write_u64(buffer, *d),
             Self::IfType(d) => NativeEndian::write_u32(buffer, (*d).into()),
             Self::Mac(ref s) => buffer.copy_from_slice(s),
+            Self::MntrFlags(ref nlas) => nlas.as_slice().emit(buffer),
             Self::IfName(ref s) | Self::Ssid(ref s) => {
                 buffer[..s.len()].copy_from_slice(s.as_bytes());
                 buffer[s.len()] = 0;
