@@ -40,7 +40,7 @@ impl Nla for Nl80211MonitorModeFlags {
         }
     }
 
-    fn emit_value(&self, buffer: &mut [u8]) {
+    fn emit_value(&self, _: &mut [u8]) {
         match self {
             Self::Invalid
             | Self::FcsFail
@@ -48,8 +48,8 @@ impl Nla for Nl80211MonitorModeFlags {
             | Self::Control
             | Self::OtherBSS
             | Self::CookFrames
-            | Self::Active => {} //u8::from(*self), //NativeEndian::write_u16(buffer, u8::from(*self)),
-            Self::Other(d) => {} //buffer[0] = *d as u8,
+            | Self::Active
+            | Self::Other(_) => {}
         }
     }
 }

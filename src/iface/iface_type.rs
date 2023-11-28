@@ -2,6 +2,7 @@
 
 use core::fmt;
 
+const NL80211_IFTYPE_UNSPECIFIED: u32 = 0;
 const NL80211_IFTYPE_ADHOC: u32 = 1;
 const NL80211_IFTYPE_STATION: u32 = 2;
 const NL80211_IFTYPE_AP: u32 = 3;
